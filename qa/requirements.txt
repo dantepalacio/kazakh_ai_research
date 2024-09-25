@@ -1,0 +1,12 @@
+datasets 
+sacrebleu 
+torch 
+transformers 
+sentencepiece 
+transformers[sentencepiece]
+accelerate
+scikit-learn 
+datasets 
+peft 
+evaluate
+bitsandbytes
