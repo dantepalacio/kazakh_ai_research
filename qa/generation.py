@@ -1,3 +1,6 @@
+import torch
+from transformers import TranslationPipeline
+
 def summarize(model,tokenizer, fragments):
     question = '''Твоя задача сократить данный отрезок текста, максимально сохранив контекст, так как это интервью, постарайся в своем ответе рассказать вкратце о словах интервьюируемого человека. Если в заданном отрезке текст неясен, то постарайся на него не отвечать. Твой ответ должен быть на чистом и грамотном русском языке.'''
 
@@ -89,11 +92,11 @@ def ru_qa(model,tokenizer, text):
 
 
 def translate_qa(model,tokenizer,text):
-    translate_template = f'''Ты носитель казахского и русского языков. Твоя задача правильно перевести текст с русского языка на казахский. Твой ответ всегда должен быть чисто на казахском и содержать только перевод:
+    translate_template = f'''Твоя задача правильно перевести текст, который указан ниже, на чистый казахский язык. Не оставляй комментарии, твоя задача вернуть просто перевод.
     ### Текст, который нужно перевести:
     {text}
 
-    ### Ответ:
+    ### Перевод:
     '''
 
     messages = [
@@ -112,11 +115,30 @@ def translate_qa(model,tokenizer,text):
     )
     result = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    start_marker = "### Ответ:"
+    start_marker = "### Перевод:"
     answer_start = result.find(start_marker)
     if answer_start != -1:
         answer_result = result[answer_start + len(start_marker):].strip()
 
-    # print('---------------------')
-    # print(answer_result)
-    return result
+
+    return answer_result
+
+
+def translate_tilmash(model, tokenizer, text):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    model = model.to(device)
+    
+    tilmash = TranslationPipeline(
+        model=model,
+        tokenizer=tokenizer,
+        src_lang="rus_Cyrl",
+        tgt_lang="kaz_Cyrl",
+        max_length=1024,
+        device=0 if torch.cuda.is_available() else -1  # 0 for GPU, -1 for CPU
+    )
+    
+    # Translate the text
+    translated = tilmash(text)[0]['translation_text']
+    
+    return translated
