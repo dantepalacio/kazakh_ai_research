@@ -68,9 +68,9 @@ def ru_qa(model,tokenizer, text):
     outputs = model.generate(
         **input_ids,
         max_new_tokens=1024,
-        do_sample=True,
-        temperature=0.3,
-        repetition_penalty=1.5,
+        do_sample=False,
+        # temperature=0.3,
+        # repetition_penalty=1.5,
         pad_token_id=tokenizer.eos_token_id, 
         eos_token_id=tokenizer.eos_token_id,
         output_scores=False,
