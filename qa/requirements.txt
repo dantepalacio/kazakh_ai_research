@@ -10,3 +10,4 @@ datasets
 peft 
 evaluate
 bitsandbytes
+python-docx
