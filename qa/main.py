@@ -8,7 +8,7 @@ start_time = time.time()
 
 model, tokenizer = load_model()
 
-name_text = '7848709.txt'
+name_text = '7899286.txt'
 with open(f'kaz_audio/{name_text}', 'r', encoding='utf-8') as f:
     text = f.read()
 
@@ -27,3 +27,4 @@ print('################################')
 print(translated_qa)
 end_time = time.time()
 print(f'Execution: {end_time-start_time}')
+
